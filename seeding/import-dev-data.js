@@ -2,8 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import Tour from '../models/tourModel.js';
-import Review from '../models/reviewModel.js';
 import User from '../models/userModel.js';
 
 dotenv.config();
@@ -25,16 +23,14 @@ mongoose
 //   Reading a Json File
 const __dirname = path.resolve(path.dirname(''));
 
-const fileName = ['tours.json', 'reviews.json', 'users.json'];
+const fileName = ['users.json'];
 
-const [tour, review, user] = fileName.map((file) =>
+const [user] = fileName.map((file) =>
   JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/${file}`))
 );
 
 const importData = async () => {
   try {
-    await Tour.create(tour);
-    await Review.create(review);
     await User.create(user, { validateBeforeSave: false });
     console.log('Data successfully imported');
   } catch (error) {
@@ -45,8 +41,6 @@ const importData = async () => {
 
 const deleteData = async () => {
   try {
-    await Tour.deleteMany();
-    await Review.deleteMany();
     await User.deleteMany();
     console.log('Data successfully deleted');
   } catch (error) {
